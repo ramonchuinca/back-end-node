@@ -1,21 +1,53 @@
 import express, { request, response } from 'express'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 /* const = a uma variavel*/
 /* express = e passado como uma função*/
+
 const app = express ()
-app.use (express.json ())
+app.use(express.json ())
 
-const user = []
 
-app.post ('/usuarios',(req, res) => {
-        user.push(req.body)
 
-        res.send('ok aqui deu certo')
+app.post ('/usuarios',async (req, res) => {
+
+      await prisma.user.create({
+        data:{
+            email:req.body.email,
+            name:req.body.name,
+            age:req.body.age
+        }
+       })
+
+        res.status(201).json(req.body)
     })
 
-app.get ('/usuarios',(req, res) => {
 
-res.json(user)
 
+app.get('/usuarios',async(req, res) => {
+
+   const users = await prisma.user.findMany()
+
+
+    res.status(200).json(users)
 }) 
+
+
+app.put ('/usuarios',async (req, res) => {
+
+    await prisma.user.update({
+        where:{
+            id:
+        },
+      data:{
+          email:req.body.email,
+          name:req.body.name,
+          age:req.body.age
+      }
+     })
+
+      res.status(201).json(req.body)
+  })
 
 app.listen(3000)
