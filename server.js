@@ -40,7 +40,7 @@ app.post ('/usuarios',async (req, res) => {
 
         } else{
           users = await prisma.user.findMany()
-        }
+        };
 
    
 
